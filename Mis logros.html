@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página con Fondo, Logo, Título y Galería</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            background-color: black; /* Fondo negro para toda la página */
+        }
+
+        .header {
+            margin-top: 50px; /* Ajusta el margen superior del header */
+        }
+
+        .header img {
+            width: 200px; /* Ajusta el tamaño del logo según sea necesario */
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+            max-height: 80vh; /* Ajusta la altura máxima del contenido */
+            overflow-y: auto; /* Agrega una barra de desplazamiento vertical cuando sea necesario */
+        }
+
+        .title {
+            margin-top: -20px; /* Ajusta el margen superior del título */
+        }
+
+        .gallery-container {
+            max-height: 60vh; /* Ajusta la altura máxima para la galería */
+            overflow-y: auto; /* Agrega una barra de desplazamiento vertical cuando sea necesario */
+            margin-top: 20px; /* Ajusta el margen superior del contenedor de la galería */
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .gallery img {
+            width: 140px; /* Nuevo tamaño reducido */
+            height: 190px; /* Nuevo tamaño reducido */
+            object-fit: cover;
+            border: 2px solid white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra para adornar los bordes */
+            transition: transform 0.3s, box-shadow 0.3s; /* Transición para efectos de hover */
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05); /* Aumenta el tamaño al pasar el mouse */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Aumenta la sombra al pasar el mouse */
+        }
+
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px 20px;
+            background-color: transparent;
+            border: 2px solid #00FEFB;
+            color: white; /* Cambio de color del texto a blanco */
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background-color: rgba(0, 254, 251, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <a id="backButton" class="back-button">Regresar</a>
+    <div class="header">
+        <img src="Logo.png" alt="Logo">
+    </div>
+    <div class="content">
+        <h1 class="title">Mis logros</h1>
+        <div class="gallery-container">
+            <div class="gallery">
+                <!-- Agrega tus imágenes de trofeos aquí -->
+                <img src="Trofeo 1.png" alt="Trofeo 1">
+                <img src="trofeo2.jpg" alt="Trofeo 2">
+                <img src="trofeo3.jpg" alt="Trofeo 3">
+                <img src="trofeo4.jpg" alt="Trofeo 4">
+                <img src="trofeo5.jpg" alt="Trofeo 5">
+                <img src="trofeo6.jpg" alt="Trofeo 6">
+                <!-- Más imágenes de trofeos según sea necesario -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('backButton').addEventListener('click', function() {
+            window.history.back();
+        });
+    </script>
+</body>
+</html>

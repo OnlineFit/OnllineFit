@@ -1,0 +1,44 @@
+function loadExcel() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'AQUI SE PONE EL LINK DE LA TABLA DE EXCEL', true);
+    xhr.responseType = 'arraybuffer';
+
+    xhr.onload = function(e) {
+        var data = new Uint8Array(xhr.response);
+        var workbook = XLSX.read(data, {type: 'array'});
+        var firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        var jsonData = XLSX.utils.sheet_to_json(firstSheet, {header: 1});
+
+        // Limpia la tabla
+        var headerRow = document.getElementById('headerRow');
+        var bodyRows = document.getElementById('bodyRows');
+        headerRow.innerHTML = '';
+        bodyRows.innerHTML = '';
+
+        // Agrega los encabezados
+        jsonData[0].forEach(function(cell) {
+            var th = document.createElement('th');
+            th.textContent = cell;
+            headerRow.appendChild(th);
+        });
+
+        // Agrega los datos
+        jsonData.slice(1).forEach(function(row) {
+            var tr = document.createElement('tr');
+            row.forEach(function(cell) {
+                var td = document.createElement('td');
+                td.textContent = cell;
+                tr.appendChild(td);
+            });
+            bodyRows.appendChild(tr);
+        });
+    };
+
+    xhr.send();
+}
+
+// Cargar el archivo Excel al cargar la página
+window.onload = loadExcel;
+
+// Recargar el archivo Excel cada 5 minutos (300000 ms)
+setInterval(loadExcel, 300000);

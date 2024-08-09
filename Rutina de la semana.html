@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario Semanal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 110vh; /* Reducido a 100vh para ajustarse a la pantalla del dispositivo */
+            margin: 0;
+            padding-bottom: 50px; /* Añadir espacio adicional en la parte inferior */
+            background-color: #f0f0f0;
+            background-image: url('Fondo.jpeg');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        .header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 70px; /* Ajuste menor del margen superior */
+        }
+        .logo {
+            width: 400px; /* Ancho fijo para el logo */
+            height: 200px; /* Altura fija para el logo */
+            object-fit: contain; /* Mantener la relación de aspecto sin distorsionar */
+            margin-bottom: 15px; /* Mayor espacio entre el logo y el título */
+        }
+        .title {
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            margin-bottom: 20px; /* Mayor margen inferior para el título */
+        }
+        .calendar {
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 70px; /* Ajuste del margen inferior del calendario */
+            width: 90%; /* Ajuste el ancho para adaptarse al contenido */
+            max-width: 800px; /* Ancho máximo para evitar que se estire demasiado en pantallas grandes */
+            min-height: 300px; /* Establecer una altura mínima para mantener la consistencia */
+        }
+        .day {
+            padding: 8px 15px; /* Reducir el padding vertical para hacer los botones más estrechos */
+            border: none;
+            border-radius: 4px;
+            margin: 5px; /* Ajustar el margen para el espaciado entre los botones */
+            cursor: pointer;
+            background-color: #1491F9;
+            text-decoration: none;
+            color: white;
+            width: 100%; /* Mantener el ancho completo */
+            box-sizing: border-box;
+            outline: none;
+        }
+        .week {
+            display: flex; /* Usar flexbox para distribuir los botones horizontalmente */
+            flex-wrap: wrap; /* Envolver los botones en varias líneas si es necesario */
+            justify-content: space-around; /* Distribuir los botones uniformemente */
+        }
+        .day:hover {
+            background-color: #0e6ac0; /* Color de fondo al pasar el mouse */
+        }
+        .current-day {
+            background-color: #00FEFB; /* Color de fondo para el día actual */
+            color: black; /* Color de texto para el día actual */
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px; /* Margen superior para separar de la semana */
+            margin-bottom: 20px; /* Añadir margen inferior para separar de la parte inferior de la página */
+            width: 100%;
+            max-width: 800px;
+        }
+        .nav-button {
+            border: 1px solid #00FEFB;
+            background-color: transparent;
+            color: #FFFFFF;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .nav-button:hover {
+            background-color: #00FEFB;
+            color: black;
+        }
+        .week-title {
+            font-size: 18px;
+            color: white;
+            margin: 0 20px; /* Añadir margen entre el título y los botones */
+        }
+
+        /* Media queries para ajustar según el tamaño de la pantalla */
+        @media screen and (max-width: 768px) {
+            .day {
+                padding: 8px 10px; /* Ajustar el padding para botones más estrechos */
+            }
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .nav-button {
+                margin: 5px 0;
+            }
+            .week-title {
+                margin-bottom: 10px;
+            }
+        }
+
+        @media screen and (min-width: 1200px) {
+            .day {
+                min-width: 200px; /* Ejemplo: establecer un mínimo más grande en pantallas grandes */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="Logo.png" alt="Logo" class="logo">
+        <div class="title">Plan de entrenamiento</div>
+        <div class="nav-buttons">
+            <a href="#" class="nav-button" onclick="changeWeek(-1)">Semana Anterior</a>
+            <div class="week-title" id="week-title"></div>
+            <a href="#" class="nav-button" onclick="changeWeek(1)">Siguiente Semana</a>
+        </div>
+    </div>
+
+    <div class="calendar">
+        <div class="week" id="week"></div>
+    </div>
+
+    <script>
+        function updateWeek(weekOffset = 0) {
+            const weekElement = document.getElementById('week');
+            weekElement.innerHTML = ''; // Limpiar contenido anterior
+
+            const currentDate = new Date();
+            currentDate.setDate(currentDate.getDate() + (weekOffset * 7));
+            let currentDay = currentDate.getDay(); // 0 (Domingo) - 6 (Sábado)
+
+            // Ajustar currentDay para que empiece en lunes
+            currentDay = (currentDay === 0) ? 6 : currentDay - 1;
+
+            // Obtener el primer día de la semana (lunes)
+            const firstDayOfWeek = new Date(currentDate);
+            firstDayOfWeek.setDate(currentDate.getDate() - currentDay);
+
+            // Días de la semana en español, con lunes primero y domingo al final
+            const daysOfWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
+            // Crear elementos de días de la semana
+            for (let i = 0; i < 7; i++) {
+                const dayDate = new Date(firstDayOfWeek);
+                dayDate.setDate(firstDayOfWeek.getDate() + i);
+
+                const options = { day: '2-digit', month: '2-digit', year: '2-digit' };
+                const fileNameDate = dayDate.toLocaleDateString('es-ES', options).replace(/\//g, '-');
+
+                const dayElement = document.createElement('a');
+                dayElement.className = 'day';
+                dayElement.href = `Entrenamientos/${fileNameDate}.html`; // Ruta correcta a los archivos HTML
+                dayElement.textContent = daysOfWeek[i];
+
+                if (i === currentDay) {
+                    dayElement.classList.add('current-day');
+                }
+
+                weekElement.appendChild(dayElement);
+            }
+
+            // Actualizar el título de la semana
+            const weekTitleElement = document.getElementById('week-title');
+            const startDate = firstDayOfWeek.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+            const endDate = new Date(firstDayOfWeek);
+            endDate.setDate(firstDayOfWeek.getDate() + 6);
+            const endDateString = endDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+            weekTitleElement.textContent = `Semana del ${startDate} - ${endDateString}`;
+        }
+
+        let currentWeekOffset = 0;
+
+        function changeWeek(offset) {
+            currentWeekOffset += offset;
+            updateWeek(currentWeekOffset);
+        }
+
+        // Actualizar la semana al cargar la página
+        window.onload = function() {
+            updateWeek();
+        };
+    </script>
+</body>
+</html>
